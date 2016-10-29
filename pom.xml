@@ -8,7 +8,7 @@
     
     <repositories>
       <repository>
-        <id>choir-repo</id>
+        <id>big-d-repo</id>
         <name>Helges Repo</name>
         <url>http://138.68.86.0:8082/artifactory/libs-release-local</url>
       </repository>
