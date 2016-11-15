@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import controller.MockController;
 
-public class BigDMockHttpServer implements Runnable {
+public class BackendMockHttpServer implements Runnable {
 
     private static int port = 8084;
     private static String ip = "127.0.0.1";
@@ -17,7 +17,7 @@ public class BigDMockHttpServer implements Runnable {
             port = Integer.parseInt(args[0]);
             ip = args[1];
         }
-        new BigDMockHttpServer().run();
+        new BackendMockHttpServer().run();
     }
 
     @Override
@@ -28,7 +28,7 @@ public class BigDMockHttpServer implements Runnable {
             HttpServer server = HttpServer.create(new InetSocketAddress(ip, port), 0);
 
             //HTTP Server Routes
-            server.createContext("/api", new ServerAPIHandler(controller));
+            server.createContext("/api", new BackendMockAPIHandler(controller));
 
             server.start();
             System.out.println("Java HTTP Server Started ! IP: " + ip + ", PORT: " + port);

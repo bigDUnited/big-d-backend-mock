@@ -3,7 +3,9 @@ package mock;
 import dtos.JourneySummaryDTO;
 import dtos.JourneysDTO;
 import dtos.LocationDTO;
+import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
+import entity.web.WebReservationHelper;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +15,7 @@ public class MockModel {
     private final List<LocationDTO> locations;
     private final List<RouteDTO> routes;
     private final JourneysDTO journeys;
+    private final ReservationSummaryDTO reservationSummary;
 
     public MockModel() {
         locations = Arrays.asList(
@@ -32,6 +35,9 @@ public class MockModel {
                         new JourneySummaryDTO(70, new Date(), new Date(), "Small ship"),
                         new JourneySummaryDTO(105, new Date(), new Date(), "Medium ship")
                 ), "София", "București");
+
+        reservationSummary = new ReservationSummaryDTO("София", "København", new Date(),
+                new Date(), "Big ferry", 3, "Car", 3500700);
     }
 
     public List<LocationDTO> getLocations() {
@@ -47,5 +53,10 @@ public class MockModel {
     public JourneysDTO getJourneysByRouteId(String routeId) {
         //Mock does not contain logic, therefore routeId is not used.
         return journeys;
+    }
+
+    public ReservationSummaryDTO createReservation(WebReservationHelper wrh) {
+        //Mock does not contain logic, therefore the Mock of the plausable Reservation object is not used.
+        return reservationSummary;
     }
 }

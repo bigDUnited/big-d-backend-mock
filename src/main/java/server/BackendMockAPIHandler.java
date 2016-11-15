@@ -11,16 +11,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import controller.MockController;
-import dtos.LocationDTO;
-import java.util.List;
 import utilities.HttpServerGeneralUtils;
 
-public class ServerAPIHandler implements HttpHandler {
+public class BackendMockAPIHandler implements HttpHandler {
 
     private MockController controller;
     private HttpServerGeneralUtils utilities;
 
-    public ServerAPIHandler(MockController controller) {
+    public BackendMockAPIHandler(MockController controller) {
         this.controller = controller;
         utilities = new HttpServerGeneralUtils();
     }
@@ -58,29 +56,27 @@ public class ServerAPIHandler implements HttpHandler {
                 if (parts.length == 3 && parts[2] != null && "getLocations".equals(parts[2])) {
                     response = new Gson().toJson(controller.getAllLocations());
                     status = 200;
-                } 
-                /*
+                } /*
                  * Get all routes based on location id
                  * URL : http://localhost:8084/api/getRoutes/#LocationID#
                  * JSON : {}
-                 */ 
-                else if (parts.length == 4 && parts[2] != null && "getRoutes".equals(parts[2])
+                 */ else if (parts.length == 4 && parts[2] != null && "getRoutes".equals(parts[2])
                         && parts[3] != null && utilities.isNumeric(parts[3])) {
                     response = new Gson().toJson(controller.getRoutes(parts[3]));
                     status = 200;
                 } 
-                /*
+                 /*
                  * Get all journeys based on route id
                  * URL : http://localhost:8084/api/getJourney/#RouteID#
                  * JSON : {}
                  */ 
-                else if (parts.length == 4 && parts[2] != null && "getJourney".equals(parts[2])
+                 else if (parts.length == 4 && parts[2] != null && "getJourney".equals(parts[2])
                         && parts[3] != null && utilities.isNumeric(parts[3])) {
                     response = new Gson().toJson(controller.getJourney(parts[3]));
                     status = 200;
                 } else {
-                    status = 404;
-                    response = "not found";
+                    status = 500;
+                    response = "not supported";
                 }
                 break;
             case "POST":
@@ -90,8 +86,18 @@ public class ServerAPIHandler implements HttpHandler {
                 br = new BufferedReader(isr);
                 jsonQuery = br.readLine();
 
-                status = 500;
-                response = "not supported";
+                /*
+                 * Create new reservation
+                 * URL : http://localhost:8084/api/makeReservation
+                 * JSON : { "journeyId": 5, "numberOfPeople": 3, "vehicleType": "Car" }
+                 */
+                if (parts.length == 3 && parts[2] != null && "makeReservation".equals(parts[2])) {
+                    response = new Gson().toJson(controller.makeReservation(jsonQuery));
+                    status = 201;
+                } else {
+                    status = 500;
+                    response = "not supported";
+                }
                 break;
             case "PUT":
                 status = 500;

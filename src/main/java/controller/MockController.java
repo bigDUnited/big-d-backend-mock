@@ -1,8 +1,11 @@
 package controller;
 
+import com.google.gson.Gson;
 import dtos.JourneysDTO;
 import dtos.LocationDTO;
+import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
+import entity.web.WebReservationHelper;
 import java.util.List;
 import mock.MockModel;
 
@@ -33,5 +36,10 @@ public class MockController {
 
     public JourneysDTO getJourney(String routeId) {
         return model.getJourneysByRouteId(routeId);
+    }
+
+    public ReservationSummaryDTO makeReservation(String jsonQuery) {
+        WebReservationHelper wrh = new Gson().fromJson( jsonQuery, WebReservationHelper.class );
+        return model.createReservation( wrh );
     }
 }
