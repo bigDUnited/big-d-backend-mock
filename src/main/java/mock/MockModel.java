@@ -1,17 +1,51 @@
 package mock;
 
+import dtos.JourneySummaryDTO;
+import dtos.JourneysDTO;
 import dtos.LocationDTO;
+import dtos.RouteDTO;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 public class MockModel {
 
-    public List<LocationDTO> getLocations() {
-        return Arrays.asList(
+    private final List<LocationDTO> locations;
+    private final List<RouteDTO> routes;
+    private final JourneysDTO journeys;
+
+    public MockModel() {
+        locations = Arrays.asList(
                 new LocationDTO(0, "București"), new LocationDTO(1, "København"),
                 new LocationDTO(2, "София"), new LocationDTO(3, "Bratislava"),
-                new LocationDTO(4, "Warszawa")
-        );
+                new LocationDTO(4, "Warszawa"));
 
+        routes = Arrays.asList(new RouteDTO(1, "София", "București"),
+                new RouteDTO(2, "София", "København"),
+                new RouteDTO(3, "София", "Bratislava"),
+                new RouteDTO(4, "София", "Warszawa"));
+
+        journeys = new JourneysDTO(
+                Arrays.asList(
+                        new JourneySummaryDTO(25, new Date(), new Date(), "Medium ship"),
+                        new JourneySummaryDTO(35, new Date(), new Date(), "Big ship"),
+                        new JourneySummaryDTO(70, new Date(), new Date(), "Small ship"),
+                        new JourneySummaryDTO(105, new Date(), new Date(), "Medium ship")
+                ), "София", "București");
+    }
+
+    public List<LocationDTO> getLocations() {
+        return locations;
+
+    }
+
+    public List<RouteDTO> getRouteByLocationId(String locationId) {
+        //Mock does not contain logic, therefore locationId is not used.
+        return routes;
+    }
+
+    public JourneysDTO getJourneysByRouteId(String routeId) {
+        //Mock does not contain logic, therefore routeId is not used.
+        return journeys;
     }
 }

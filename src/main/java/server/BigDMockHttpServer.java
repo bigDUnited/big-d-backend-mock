@@ -12,10 +12,10 @@ public class BigDMockHttpServer implements Runnable {
 
     private static MockController controller;
 
-    public static void main( String[] args ) {
-        if ( args.length >= 3 ) {
-            port = Integer.parseInt( args[ 0 ] );
-            ip = args[ 1 ];
+    public static void main(String[] args) {
+        if (args.length >= 3) {
+            port = Integer.parseInt(args[0]);
+            ip = args[1];
         }
         new BigDMockHttpServer().run();
     }
@@ -24,18 +24,17 @@ public class BigDMockHttpServer implements Runnable {
     public void run() {
         try {
             controller = MockController.getInstance();
-            //logger = controller.getLogger();
 
-            HttpServer server = HttpServer.create( new InetSocketAddress( ip, port ), 0 );
+            HttpServer server = HttpServer.create(new InetSocketAddress(ip, port), 0);
 
             //HTTP Server Routes
-            server.createContext( "/api", new ServerAPIHandler( controller ) );
-            //server.createContext( "/", new ServerHandler() );
+            server.createContext("/api", new ServerAPIHandler(controller));
 
             server.start();
-            System.out.println( "Java HTTP Server Started ! IP: " + ip + ", PORT: " + port );
-        } catch ( IOException e ) {
-            System.out.println( "Java HTTP Server Started ! IP: " + ip + ", PORT: " + port );
+            System.out.println("Java HTTP Server Started ! IP: " + ip + ", PORT: " + port);
+        } catch (IOException e) {
+            System.out.println("Java HTTP Server Started ! IP: " + ip + ", PORT: " + port
+                    + "\n The error is : " + e);
         }
     }
 }

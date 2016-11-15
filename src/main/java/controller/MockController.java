@@ -1,6 +1,8 @@
 package controller;
 
+import dtos.JourneysDTO;
 import dtos.LocationDTO;
+import dtos.RouteDTO;
 import java.util.List;
 import mock.MockModel;
 
@@ -23,5 +25,13 @@ public class MockController {
 
     public List<LocationDTO> getAllLocations() {
         return model.getLocations();
+    }
+
+    public List<RouteDTO> getRoutes(String locationId) {
+        return model.getRouteByLocationId(locationId);
+    }
+
+    public JourneysDTO getJourney(String routeId) {
+        return model.getJourneysByRouteId(routeId);
     }
 }

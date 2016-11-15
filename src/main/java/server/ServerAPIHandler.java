@@ -53,26 +53,35 @@ public class ServerAPIHandler implements HttpHandler {
                 /*
                  * Get all locations
                  * URL : http://localhost:8084/api/getLocations
+                * JSON : {}
                  */
                 if (parts.length == 3 && parts[2] != null && "getLocations".equals(parts[2])) {
-                    List<LocationDTO> stuff = controller.getAllLocations();
-
-                    response = new Gson().toJson(stuff);
-                    status = 201;
-                    
+                    response = new Gson().toJson(controller.getAllLocations());
+                    status = 200;
+                } 
+                /*
+                 * Get all routes based on location id
+                 * URL : http://localhost:8084/api/getRoutes/#LocationID#
+                 * JSON : {}
+                 */ 
+                else if (parts.length == 4 && parts[2] != null && "getRoutes".equals(parts[2])
+                        && parts[3] != null && utilities.isNumeric(parts[3])) {
+                    response = new Gson().toJson(controller.getRoutes(parts[3]));
+                    status = 200;
+                } 
+                /*
+                 * Get all journeys based on route id
+                 * URL : http://localhost:8084/api/getJourney/#RouteID#
+                 * JSON : {}
+                 */ 
+                else if (parts.length == 4 && parts[2] != null && "getJourney".equals(parts[2])
+                        && parts[3] != null && utilities.isNumeric(parts[3])) {
+                    response = new Gson().toJson(controller.getJourney(parts[3]));
+                    status = 200;
                 } else {
-                    status = 500;
-                    response = "not supported";
+                    status = 404;
+                    response = "not found";
                 }
-                //else if ( parts.length > 2 && parts[ 2 ] != null && "registerServerId".equals( parts[ 2 ] ) ) {
-//
-//                    int curServerId = random.nextInt( 10 - 1 ) + 1;
-//                    if ( controller.createUserIdentifierObj( address, curServerId, "register" ) ) {
-//                        response = new Gson().toJson( curServerId );
-//                        status = 201;
-//                    }
-//                }
-
                 break;
             case "POST":
                 //use PUT to create resources, or use POST to update resources.
@@ -81,24 +90,8 @@ public class ServerAPIHandler implements HttpHandler {
                 br = new BufferedReader(isr);
                 jsonQuery = br.readLine();
 
-                System.out.println("Hello " + parts[2] + " " + parts[3]);
-                /*
-                 * Save Client Identifier 
-                 * URL : http://localhost:8084/api/getRoutes
-                 * JSON : {"clientRN": 8 }
-                 */
-                if (parts.length == 4 && parts[2] != null && "getRoutes".equals(parts[2])
-                        && parts[3] != null && utilities.isNumeric(parts[3])) {
-                    //response = new Gson().toJson( controller.createSongAPI( jsonQuery ) );
-                    int locationId = Integer.parseInt(parts[3]) + 1;
-                    //if ( controller.addClientId( address, curClientId ) ) {
-                    response = new Gson().toJson("Location id is : " + locationId);
-                    status = 201;
-                    //}
-                } else {
-                    status = 500;
-                    response = "not supported";
-                }
+                status = 500;
+                response = "not supported";
                 break;
             case "PUT":
                 status = 500;
