@@ -38,7 +38,7 @@ public class BackendMockAPIHandler implements HttpHandler {
         Date date = new Date();
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
         String dateFormatted = formatter.format(date);
-        System.out.println("BackendServerAPIHandler DEBUG: # " + dateFormatted + " # #Request method: " + method + ", Request path : " + path + ", path Length: " + parts.length + " / 2nd elem : " + (parts.length > 0 ? parts[1] : "NO"));
+        System.out.println("BackendServerAPIHandler DEBUG:# " + address + " # " + dateFormatted + " # #Request method: " + method + ", Request path : " + path + ", path Length: " + parts.length + " / 2nd elem : " + (parts.length > 0 ? parts[1] : "NO"));
         //Debug END
 
         //POST, PUT, (DELETE?)
@@ -64,13 +64,11 @@ public class BackendMockAPIHandler implements HttpHandler {
                         && parts[3] != null && utilities.isNumeric(parts[3])) {
                     response = new Gson().toJson(controller.getRoutes(parts[3]));
                     status = 200;
-                } 
-                 /*
+                } /*
                  * Get all journeys based on route id
                  * URL : http://localhost:8084/api/getJourney/#RouteID#
                  * JSON : {}
-                 */ 
-                 else if (parts.length == 4 && parts[2] != null && "getJourney".equals(parts[2])
+                 */ else if (parts.length == 4 && parts[2] != null && "getJourney".equals(parts[2])
                         && parts[3] != null && utilities.isNumeric(parts[3])) {
                     response = new Gson().toJson(controller.getJourney(parts[3]));
                     status = 200;

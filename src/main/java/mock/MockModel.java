@@ -5,7 +5,6 @@ import dtos.JourneysDTO;
 import dtos.LocationDTO;
 import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
-import entity.web.WebReservationHelper;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -55,8 +54,8 @@ public class MockModel {
         return journeys;
     }
 
-    public ReservationSummaryDTO createReservation(WebReservationHelper wrh) {
-        //Mock does not contain logic, therefore the Mock of the plausable Reservation object is not used.
+    public ReservationSummaryDTO createReservation(String jsonQuery) {
+        //Mock does not contain logic, therefore the json object is not used.
         return reservationSummary;
     }
 }

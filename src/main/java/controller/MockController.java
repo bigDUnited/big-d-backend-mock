@@ -5,7 +5,6 @@ import dtos.JourneysDTO;
 import dtos.LocationDTO;
 import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
-import entity.web.WebReservationHelper;
 import java.util.List;
 import mock.MockModel;
 
@@ -39,7 +38,6 @@ public class MockController {
     }
 
     public ReservationSummaryDTO makeReservation(String jsonQuery) {
-        WebReservationHelper wrh = new Gson().fromJson( jsonQuery, WebReservationHelper.class );
-        return model.createReservation( wrh );
+        return model.createReservation( jsonQuery );
     }
 }
