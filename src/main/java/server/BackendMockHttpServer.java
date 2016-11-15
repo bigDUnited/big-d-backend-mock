@@ -17,7 +17,6 @@ public class BackendMockHttpServer implements Runnable {
             port = Integer.parseInt(args[0]);
             ip = args[1];
         }
-        new BackendMockHttpServer().run();
     }
 
     @Override
