@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import controller.MockController;
+import etos.ErrorTransferObject;
 import utilities.HttpServerGeneralUtils;
 
 public class BackendMockAPIHandler implements HttpHandler {
@@ -74,7 +75,7 @@ public class BackendMockAPIHandler implements HttpHandler {
                     status = 200;
                 } else {
                     status = 500;
-                    response = "not supported";
+                    response = new Gson().toJson(new ErrorTransferObject("not supported"));
                 }
                 break;
             case "POST":
@@ -94,20 +95,20 @@ public class BackendMockAPIHandler implements HttpHandler {
                     status = 201;
                 } else {
                     status = 500;
-                    response = "not supported";
+                    response = new Gson().toJson(new ErrorTransferObject("not supported"));
                 }
                 break;
             case "PUT":
                 status = 500;
-                response = "not supported";
+                response = new Gson().toJson(new ErrorTransferObject("not supported"));
                 break;
             case "DELETE":
                 status = 500;
-                response = "not supported";
+                response = new Gson().toJson(new ErrorTransferObject("not supported"));
                 break;
             default:
                 status = 500;
-                response = "not supported";
+                response = new Gson().toJson(new ErrorTransferObject("not supported"));
                 break;
         }
 
