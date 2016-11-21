@@ -13,6 +13,7 @@ public class MockModel {
 
     private final List<LocationDTO> locations;
     private final List<RouteDTO> routes;
+    private final List<RouteDTO> routes2;
     private final JourneysDTO journeys;
     private final ReservationSummaryDTO reservationSummary;
 
@@ -26,6 +27,11 @@ public class MockModel {
                 new RouteDTO(2, "София", "København"),
                 new RouteDTO(3, "София", "Bratislava"),
                 new RouteDTO(4, "София", "Warszawa"));
+        
+        routes2 = Arrays.asList(new RouteDTO(1, "Cph", "București"),
+                new RouteDTO(2, "Cph", "København"),
+                new RouteDTO(3, "Cph", "Bratislava"),
+                new RouteDTO(4, "Cph", "Warszawa"));
 
         journeys = new JourneysDTO(
                 Arrays.asList(
@@ -45,6 +51,9 @@ public class MockModel {
     }
 
     public List<RouteDTO> getRouteByLocationId(String locationId) {
+        if ( Integer.parseInt(locationId) == 2 ) {
+            return routes2;
+        }
         //Mock does not contain logic, therefore locationId is not used.
         return routes;
     }
