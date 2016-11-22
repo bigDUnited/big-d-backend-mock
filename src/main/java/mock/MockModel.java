@@ -136,8 +136,8 @@ public class MockModel {
         String vehicleType = "";
         try {
             journeyId = object.getInt("journeyId");
-            object.getInt("numberOfPeople");
-            object.getString("vehicleType");
+            numberOfPeople = object.getInt("numberOfPeople");
+            vehicleType = object.getString("vehicleType");
         } catch (Exception e) {
             return null;
         }
