@@ -24,7 +24,7 @@ public class MockModel {
         return Arrays.asList(
                 new LocationDTO(0, "Bucuresti"),
                 new LocationDTO(1, "Copenhagen"),
-                new LocationDTO(2, "Sofia"),
+                new LocationDTO(2, "София"),
                 new LocationDTO(3, "Bratislava"),
                 new LocationDTO(4, "Warszawa"));
 
