@@ -2,7 +2,7 @@ package main;
 
 import server.BackendMockHttpServer;
 
-public class HttpServerThreadRunner {
+public class Runner {
     
     public static void main(String[] args) {
         Thread t = new Thread(new BackendMockHttpServer(new String[0]));
