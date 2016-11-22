@@ -14,8 +14,8 @@ import controller.MockController;
 import dtos.JourneysDTO;
 import dtos.RouteDTO;
 import etos.ErrorTransferObject;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
 import java.util.List;
 import utilities.HttpServerGeneralUtils;
 
@@ -138,8 +138,11 @@ public class BackendMockAPIHandler implements HttpHandler {
 
         he.getResponseHeaders().add("Content-Type", "application/json;charset=UTF-8");
         he.sendResponseHeaders(status, 0);
+        
+        System.out.println("headers: " + he.getRequestHeaders().values());
+        System.out.println("response headers: " + he.getResponseHeaders().values());
         try (OutputStream os = he.getResponseBody()) {
-            os.write(response.getBytes());
+            os.write(response.getBytes(StandardCharsets.UTF_8));
         }
     }
 }
