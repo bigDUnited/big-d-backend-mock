@@ -139,8 +139,6 @@ public class BackendMockAPIHandler implements HttpHandler {
         he.getResponseHeaders().add("Content-Type", "application/json");
         he.sendResponseHeaders(status, 0);
         try (OutputStream os = he.getResponseBody()) {
-            byte[] bytes = response.getBytes(StandardCharsets.ISO_8859_1);
-            response = new String(bytes, StandardCharsets.UTF_8);
             os.write(response.getBytes());
         }
     }
