@@ -5,17 +5,21 @@ import dtos.JourneysDTO;
 import dtos.LocationDTO;
 import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
+import java.util.ArrayList;
 import java.util.List;
 import mock.MockModel;
+import utilities.HttpServerGeneralUtils;
 
 public class MockController {
 
     private static MockController instance = null;
     private MockModel model;
+    private HttpServerGeneralUtils utils;
 
     private MockController() {
         // Exists only to defeat instantiation.
         model = new MockModel();
+        utils = new HttpServerGeneralUtils();
     }
 
     public static MockController getInstance() {
@@ -30,14 +34,20 @@ public class MockController {
     }
 
     public List<RouteDTO> getRoutes(String locationId) {
-        return model.getRouteByLocationId(locationId);
+        if (utils.isNumeric(locationId)) {
+            return model.getRouteByLocationId(Integer.parseInt(locationId));
+        }
+        return new ArrayList();
     }
 
     public JourneysDTO getJourney(String routeId) {
-        return model.getJourneysByRouteId(routeId);
+        if (utils.isNumeric(routeId)) {
+            return model.getJourneysByRouteId(Integer.parseInt(routeId));
+        }
+        return null;
     }
 
     public ReservationSummaryDTO makeReservation(String jsonQuery) {
-        return model.createReservation( jsonQuery );
+        return model.createReservation(jsonQuery);
     }
 }

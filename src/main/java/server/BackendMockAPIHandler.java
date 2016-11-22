@@ -11,7 +11,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import controller.MockController;
+import dtos.JourneysDTO;
+import dtos.RouteDTO;
 import etos.ErrorTransferObject;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.List;
 import utilities.HttpServerGeneralUtils;
 
 public class BackendMockAPIHandler implements HttpHandler {
@@ -61,18 +66,37 @@ public class BackendMockAPIHandler implements HttpHandler {
                  * Get all routes based on location id
                  * URL : http://localhost:8084/api/getRoutes/#LocationID#
                  * JSON : {}
+                 * Returns a list of RouteDTO if mock contains results for the 
+                 *      specified location id 
+                 * OR ELSE Returns an ErrorTransferObject with error message
                  */ else if (parts.length == 4 && parts[2] != null && "getRoutes".equals(parts[2])
                         && parts[3] != null && utilities.isNumeric(parts[3])) {
-                    response = new Gson().toJson(controller.getRoutes(parts[3]));
-                    status = 200;
+
+                    List<RouteDTO> routesList = controller.getRoutes(parts[3]);
+                    if (routesList != null) {
+                        response = new Gson().toJson(routesList);
+                        status = 200;
+                    } else {
+                        response = new Gson().toJson(new ErrorTransferObject("Route with ID " + parts[3] + " not found"));
+                        status = 404;
+                    }
+
                 } /*
                  * Get all journeys based on route id
                  * URL : http://localhost:8084/api/getJourney/#RouteID#
                  * JSON : {}
                  */ else if (parts.length == 4 && parts[2] != null && "getJourney".equals(parts[2])
                         && parts[3] != null && utilities.isNumeric(parts[3])) {
-                    response = new Gson().toJson(controller.getJourney(parts[3]));
-                    status = 200;
+
+                    JourneysDTO journey = controller.getJourney(parts[3]);
+                    if (journey != null) {
+                        response = new Gson().toJson(controller.getJourney(parts[3]));
+                        status = 200;
+                    } else {
+                        response = new Gson().toJson(new ErrorTransferObject("Journey with ID " + parts[3] + " not found"));
+                        status = 404;
+                    }
+
                 } else {
                     status = 500;
                     response = new Gson().toJson(new ErrorTransferObject("not supported"));
@@ -115,6 +139,8 @@ public class BackendMockAPIHandler implements HttpHandler {
         he.getResponseHeaders().add("Content-Type", "application/json");
         he.sendResponseHeaders(status, 0);
         try (OutputStream os = he.getResponseBody()) {
+            byte[] bytes = response.getBytes(StandardCharsets.ISO_8859_1);
+            response = new String(bytes, StandardCharsets.UTF_8);
             os.write(response.getBytes());
         }
     }
