@@ -1,6 +1,5 @@
 package mock;
 
-import com.google.gson.Gson;
 import dtos.JourneySummaryDTO;
 import dtos.JourneysDTO;
 import dtos.LocationDTO;
@@ -16,7 +15,7 @@ import org.json.JSONObject;
 
 public class MockModel {
 
-    Random rand;
+    private Random rand;
 
     public MockModel() {
         rand = new Random();
@@ -24,8 +23,8 @@ public class MockModel {
 
     public List<LocationDTO> getLocations() {
         return Arrays.asList(
-                new LocationDTO(0, "Bucuresti"),
-                new LocationDTO(1, "Copenhagen"),
+                new LocationDTO(0, "București"),
+                new LocationDTO(1, "København"),
                 new LocationDTO(2, "София"),
                 new LocationDTO(3, "Bratislava"),
                 new LocationDTO(4, "Warszawa"));
@@ -38,34 +37,34 @@ public class MockModel {
         //too many possibilities. eg. 5 routes = 5x5 journeys. With this solution
         //of the backend mock there should be only 5 journeys for 5 routes.
         List<RouteDTO> fromRomania = Arrays.asList(
-                new RouteDTO(0, "Bucuresti", "Sofia"),
-                new RouteDTO(1, "Bucuresti", "Copenhagen"),
-                new RouteDTO(2, "Bucuresti", "Bratislava"),
-                new RouteDTO(3, "Bucuresti", "Warszawa"));
+                new RouteDTO(0, "București", "София"),
+                new RouteDTO(1, "București", "København"),
+                new RouteDTO(2, "București", "Bratislava"),
+                new RouteDTO(3, "București", "Warszawa"));
 
         List<RouteDTO> fromDenmark = Arrays.asList(
-                new RouteDTO(4, "Copenhagen", "Bucuresti"),
-                new RouteDTO(5, "Copenhagen", "Sofia"),
-                new RouteDTO(6, "Copenhagen", "Bratislava"),
-                new RouteDTO(7, "Copenhagen", "Warszawa"));
+                new RouteDTO(4, "København", "București"),
+                new RouteDTO(5, "København", "София"),
+                new RouteDTO(6, "København", "Bratislava"),
+                new RouteDTO(7, "København", "Warszawa"));
 
         List<RouteDTO> fromBulgaria = Arrays.asList(
-                new RouteDTO(8, "Sofia", "Bucuresti"),
-                new RouteDTO(9, "Sofia", "Copenhagen"),
-                new RouteDTO(10, "Sofia", "Bratislava"),
-                new RouteDTO(11, "Sofia", "Warszawa"));
+                new RouteDTO(8, "София", "București"),
+                new RouteDTO(9, "София", "København"),
+                new RouteDTO(10, "София", "Bratislava"),
+                new RouteDTO(11, "София", "Warszawa"));
 
         List<RouteDTO> fromSlovakia = Arrays.asList(
-                new RouteDTO(12, "Bratislava", "Bucuresti"),
-                new RouteDTO(13, "Bratislava", "Copenhagen"),
-                new RouteDTO(14, "Bratislava", "Sofia"),
+                new RouteDTO(12, "Bratislava", "București"),
+                new RouteDTO(13, "Bratislava", "København"),
+                new RouteDTO(14, "Bratislava", "София"),
                 new RouteDTO(15, "Bratislava", "Warszawa"));
 
         List<RouteDTO> fromPoland = Arrays.asList(
-                new RouteDTO(16, "Warszawa", "Bucuresti"),
-                new RouteDTO(17, "Warszawa", "Copenhagen"),
+                new RouteDTO(16, "Warszawa", "București"),
+                new RouteDTO(17, "Warszawa", "København"),
                 new RouteDTO(18, "Warszawa", "Bratislava"),
-                new RouteDTO(19, "Warszawa", "Sofia"));
+                new RouteDTO(19, "Warszawa", "София"));
 
         switch (locationId) {
             case -1:
@@ -131,12 +130,17 @@ public class MockModel {
 
     public ReservationSummaryDTO createReservation(String jsonQuery) {
         //Mock does not contain logic, therefore the json object is not used.
-        System.out.println("jsonQuery is : " + jsonQuery);
-
         JSONObject object = new JSONObject(jsonQuery);
-        int journeyId = object.getInt("journeyId");
-        int numberOfPeople = object.getInt("numberOfPeople");
-        String vehicleType = object.getString("vehicleType");
+        
+        int journeyId = 0, numberOfPeople = 0;
+        String vehicleType = "";
+        try {
+            journeyId = object.getInt("journeyId");
+            object.getInt("numberOfPeople");
+            object.getString("vehicleType");
+        } catch (Exception e) {
+            return null;
+        }
 
         int max = 999999, min = 100000;
 
@@ -148,7 +152,10 @@ public class MockModel {
 
             for (int y = 0; y < listOfJourneySummaries.size(); y++) {
                 if (listOfJourneySummaries.get(y).getJourneyId() == journeyId) {
-                    System.out.println("WE HAVE A MATCH!!!!");
+
+                    //Note: Departure and Arrival Date will never be the same as
+                    //the original object, because this is a mock and we don't
+                    //really save anything anywhere.
                     return new ReservationSummaryDTO(
                             currRouteObj.getDepartureLocation(),
                             currRouteObj.getDestinationLocation(),
