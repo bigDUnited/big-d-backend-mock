@@ -1,5 +1,6 @@
 package mock;
 
+import com.google.gson.Gson;
 import dtos.JourneySummaryDTO;
 import dtos.JourneysDTO;
 import dtos.LocationDTO;
@@ -11,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import org.json.JSONObject;
 
 public class MockModel {
 
@@ -111,14 +113,17 @@ public class MockModel {
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.DATE, 1);
 
+        int journeyId = (1 * routeId) * 4;
+        int[] journeyIds = {journeyId, (journeyId + 1), (journeyId + 2), (journeyId + 3)};
+
         return new JourneysDTO(Arrays.asList(
-                new JourneySummaryDTO(0,
+                new JourneySummaryDTO(journeyIds[0],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Medium ship"),
-                new JourneySummaryDTO(1,
+                new JourneySummaryDTO(journeyIds[1],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Big ship"),
-                new JourneySummaryDTO(2,
+                new JourneySummaryDTO(journeyIds[2],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Small ship"),
-                new JourneySummaryDTO(3,
+                new JourneySummaryDTO(journeyIds[3],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Medium ship")
         ), currentRoute.getDepartureLocation(), currentRoute.getDestinationLocation());
 
@@ -126,8 +131,37 @@ public class MockModel {
 
     public ReservationSummaryDTO createReservation(String jsonQuery) {
         //Mock does not contain logic, therefore the json object is not used.
-        System.out.println("jsonQuery is : " + jsonQuery );
-        return new ReservationSummaryDTO("София", "København", new Date(),
-                new Date(), "Big ferry", 3, "Car", 3500700);
+        System.out.println("jsonQuery is : " + jsonQuery);
+
+        JSONObject object = new JSONObject(jsonQuery);
+        int journeyId = object.getInt("journeyId");
+        int numberOfPeople = object.getInt("numberOfPeople");
+        String vehicleType = object.getString("vehicleType");
+
+        int max = 999999, min = 100000;
+
+        int routeId = 0;
+        for (int x = 0; x < 20; x++) {
+            JourneysDTO currRouteObj = getJourneysByRouteId(routeId);
+
+            List<JourneySummaryDTO> listOfJourneySummaries = currRouteObj.getJourneysList();
+
+            for (int y = 0; y < listOfJourneySummaries.size(); y++) {
+                if (listOfJourneySummaries.get(y).getJourneyId() == journeyId) {
+                    System.out.println("WE HAVE A MATCH!!!!");
+                    return new ReservationSummaryDTO(
+                            currRouteObj.getDepartureLocation(),
+                            currRouteObj.getDestinationLocation(),
+                            listOfJourneySummaries.get(y).getDepartureDate(),
+                            listOfJourneySummaries.get(y).getArrivalDate(),
+                            listOfJourneySummaries.get(y).getFerryName(),
+                            numberOfPeople, vehicleType,
+                            rand.nextInt((max - min) + 1) + min);
+                }
+            }
+            routeId++;
+        }
+        return null;
+
     }
 }

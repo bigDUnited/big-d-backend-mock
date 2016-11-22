@@ -12,7 +12,7 @@ public class BackendMockHttpServer implements Runnable {
 
     private static MockController controller;
 
-    public static void main(String[] args) {
+    public BackendMockHttpServer(String[] args) {
         if (args.length >= 3) {
             port = Integer.parseInt(args[0]);
             ip = args[1];
@@ -32,8 +32,8 @@ public class BackendMockHttpServer implements Runnable {
             server.start();
             System.out.println("Java HTTP Server Started ! IP: " + ip + ", PORT: " + port);
         } catch (IOException e) {
-            System.out.println("Java HTTP Server Started ! IP: " + ip + ", PORT: " + port
-                    + "\n The error is : " + e);
+            System.out.println("ERROR: Java HTTP Server DID NOT start! ! IP: " + ip
+                    + ", PORT: " + port + "\n The error is : " + e);
         }
     }
 }
