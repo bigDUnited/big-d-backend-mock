@@ -1,4 +1,6 @@
-package server;
+package main;
+
+import server.BackendMockHttpServer;
 
 public class HttpServerThreadRunner {
     
