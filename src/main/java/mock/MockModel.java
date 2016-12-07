@@ -14,13 +14,7 @@ import java.util.Random;
 
 public class MockModel {
 
-    Random rand;
-
-    public MockModel() {
-        rand = new Random();
-    }
-
-    public List<LocationDTO> getLocations() {
+    public static List<LocationDTO> getLocations() {
         return Arrays.asList(
                 new LocationDTO(0, "Bucuresti"),
                 new LocationDTO(1, "Copenhagen"),
@@ -30,7 +24,7 @@ public class MockModel {
 
     }
 
-    public List<RouteDTO> getRouteByLocationId(int locationId) {
+    public static List<RouteDTO> getRouteByLocationId(int locationId) {
         //Ids of routes for different locations are having similar id's, so
         //that it will be easier to create a logical mock with different but not 
         //too many possibilities. eg. 5 routes = 5x5 journeys. With this solution
@@ -92,14 +86,14 @@ public class MockModel {
         }
     }
 
-    private Date returnImaginaryDate(Calendar cal) {
+    private static Date returnImaginaryDate(Calendar cal) {
         int max = 12, min = 2;
 
-        cal.add(Calendar.HOUR_OF_DAY, -(rand.nextInt((max - min) + 1) + min)); // adds one hour
+        cal.add(Calendar.HOUR_OF_DAY, -(new Random().nextInt((max - min) + 1) + min)); // adds one hour
         return cal.getTime(); // returns new date object, one hour in the future
     }
 
-    public JourneysDTO getJourneysByRouteId(int routeId) {
+    public static JourneysDTO getJourneysByRouteId(int routeId) {
 
         if (routeId < 0 || routeId > 19) {
             return null;
@@ -124,7 +118,7 @@ public class MockModel {
 
     }
 
-    public ReservationSummaryDTO createReservation(String jsonQuery) {
+    public static ReservationSummaryDTO createReservation(String jsonQuery) {
         //Mock does not contain logic, therefore the json object is not used.
         System.out.println("jsonQuery is : " + jsonQuery );
         return new ReservationSummaryDTO("София", "København", new Date(),
