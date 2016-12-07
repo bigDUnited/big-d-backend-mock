@@ -29,6 +29,7 @@ public class MockControllerTest {
         System.out.println("getInstance");
         MockController expResult = controllerInstance;
         MockController result = MockController.getInstance();
+
         assertEquals(expResult, result);
     }
 
@@ -40,6 +41,7 @@ public class MockControllerTest {
         System.out.println("getAllLocations");
         List<LocationDTO> expResult = MockModel.getLocations();
         List<LocationDTO> result = controllerInstance.getAllLocations();
+
         assertEquals(expResult.toString(), result.toString());
     }
 
@@ -52,6 +54,7 @@ public class MockControllerTest {
         Integer locationId = 1;
         List<RouteDTO> expResult = MockModel.getRouteByLocationId(locationId);
         List<RouteDTO> result = controllerInstance.getRoutes(locationId.toString());
+
         assertEquals(expResult.toString(), result.toString());
     }
 
@@ -64,6 +67,7 @@ public class MockControllerTest {
         Integer routeId = 1;
         JourneysDTO expResult = MockModel.getJourneysByRouteId(routeId);
         JourneysDTO result = controllerInstance.getJourney(routeId.toString());
+
         assertEquals(expResult.getDepartureLocation(), result.getDepartureLocation());
         assertEquals(expResult.getDestinationLocation(), result.getDestinationLocation());
         assertEquals(expResult.getJourneysList().size(), result.getJourneysList().size());
@@ -75,10 +79,21 @@ public class MockControllerTest {
     @Test
     public void testMakeReservation() {
         System.out.println("makeReservation");
-        String jsonQuery = "{not really working}";
+        String jsonQuery = "{journeyId:1,numberOfPeople:2,vehicleType:car}";
         ReservationSummaryDTO expResult = MockModel.createReservation(jsonQuery);
-        ReservationSummaryDTO result = controllerInstance.makeReservation(jsonQuery);        
-        assertEquals(expResult.toString(), result.toString());
+        ReservationSummaryDTO result = controllerInstance.makeReservation(jsonQuery);
+        System.out.println("arrival" + expResult.getArrivalDate() + " arrival res" + result.getArrivalDate());
+        System.out.println("departure" + expResult.getDepartureDate() + " departure res" + result.getDepartureDate());
+
+//        arrival date and departure date are random so they will not be equal 100% of the time
+//        assertEquals(expResult.getArrivalDate(), result.getArrivalDate());
+//        assertEquals(expResult.getDepartureDate(), result.getDepartureDate());
+//        assertEquals(expResult.getReferenceNumber(), result.getReferenceNumber());
+        assertEquals(expResult.getDepartureLocation(), result.getDepartureLocation());
+        assertEquals(expResult.getDestinationLocation(), result.getDestinationLocation());
+        assertEquals(expResult.getFerryName(), result.getFerryName());
+        assertEquals(expResult.getNumberOfPeople(), result.getNumberOfPeople());
+        assertEquals(expResult.getVehicleType(), result.getVehicleType());
     }
 
 }

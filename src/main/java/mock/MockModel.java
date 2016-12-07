@@ -11,17 +11,17 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import org.json.JSONObject;
 
 public class MockModel {
 
     public static List<LocationDTO> getLocations() {
         return Arrays.asList(
-                new LocationDTO(0, "Bucuresti"),
-                new LocationDTO(1, "Copenhagen"),
+                new LocationDTO(0, "București"),
+                new LocationDTO(1, "København"),
                 new LocationDTO(2, "София"),
                 new LocationDTO(3, "Bratislava"),
                 new LocationDTO(4, "Warszawa"));
-
     }
 
     public static List<RouteDTO> getRouteByLocationId(int locationId) {
@@ -30,34 +30,34 @@ public class MockModel {
         //too many possibilities. eg. 5 routes = 5x5 journeys. With this solution
         //of the backend mock there should be only 5 journeys for 5 routes.
         List<RouteDTO> fromRomania = Arrays.asList(
-                new RouteDTO(0, "Bucuresti", "Sofia"),
-                new RouteDTO(1, "Bucuresti", "Copenhagen"),
-                new RouteDTO(2, "Bucuresti", "Bratislava"),
-                new RouteDTO(3, "Bucuresti", "Warszawa"));
+                new RouteDTO(0, "București", "София"),
+                new RouteDTO(1, "București", "København"),
+                new RouteDTO(2, "București", "Bratislava"),
+                new RouteDTO(3, "București", "Warszawa"));
 
         List<RouteDTO> fromDenmark = Arrays.asList(
-                new RouteDTO(4, "Copenhagen", "Bucuresti"),
-                new RouteDTO(5, "Copenhagen", "Sofia"),
-                new RouteDTO(6, "Copenhagen", "Bratislava"),
-                new RouteDTO(7, "Copenhagen", "Warszawa"));
+                new RouteDTO(4, "København", "București"),
+                new RouteDTO(5, "København", "София"),
+                new RouteDTO(6, "København", "Bratislava"),
+                new RouteDTO(7, "København", "Warszawa"));
 
         List<RouteDTO> fromBulgaria = Arrays.asList(
-                new RouteDTO(8, "Sofia", "Bucuresti"),
-                new RouteDTO(9, "Sofia", "Copenhagen"),
-                new RouteDTO(10, "Sofia", "Bratislava"),
-                new RouteDTO(11, "Sofia", "Warszawa"));
+                new RouteDTO(8, "София", "București"),
+                new RouteDTO(9, "София", "København"),
+                new RouteDTO(10, "София", "Bratislava"),
+                new RouteDTO(11, "София", "Warszawa"));
 
         List<RouteDTO> fromSlovakia = Arrays.asList(
-                new RouteDTO(12, "Bratislava", "Bucuresti"),
-                new RouteDTO(13, "Bratislava", "Copenhagen"),
-                new RouteDTO(14, "Bratislava", "Sofia"),
+                new RouteDTO(12, "Bratislava", "București"),
+                new RouteDTO(13, "Bratislava", "København"),
+                new RouteDTO(14, "Bratislava", "София"),
                 new RouteDTO(15, "Bratislava", "Warszawa"));
 
         List<RouteDTO> fromPoland = Arrays.asList(
-                new RouteDTO(16, "Warszawa", "Bucuresti"),
-                new RouteDTO(17, "Warszawa", "Copenhagen"),
+                new RouteDTO(16, "Warszawa", "București"),
+                new RouteDTO(17, "Warszawa", "København"),
                 new RouteDTO(18, "Warszawa", "Bratislava"),
-                new RouteDTO(19, "Warszawa", "Sofia"));
+                new RouteDTO(19, "Warszawa", "София"));
 
         switch (locationId) {
             case -1:
@@ -105,14 +105,17 @@ public class MockModel {
         cal.setTime(new Date()); // sets calendar time/date
         cal.add(Calendar.DATE, 1);
 
+        int journeyId = (1 * routeId) * 4;
+        int[] journeyIds = {journeyId, (journeyId + 1), (journeyId + 2), (journeyId + 3)};
+
         return new JourneysDTO(Arrays.asList(
-                new JourneySummaryDTO(0,
+                new JourneySummaryDTO(journeyIds[0],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Medium ship"),
-                new JourneySummaryDTO(1,
+                new JourneySummaryDTO(journeyIds[1],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Big ship"),
-                new JourneySummaryDTO(2,
+                new JourneySummaryDTO(journeyIds[2],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Small ship"),
-                new JourneySummaryDTO(3,
+                new JourneySummaryDTO(journeyIds[3],
                         returnImaginaryDate(cal), returnImaginaryDate(cal), "Medium ship")
         ), currentRoute.getDepartureLocation(), currentRoute.getDestinationLocation());
 
@@ -120,8 +123,45 @@ public class MockModel {
 
     public static ReservationSummaryDTO createReservation(String jsonQuery) {
         //Mock does not contain logic, therefore the json object is not used.
-        System.out.println("jsonQuery is : " + jsonQuery );
-        return new ReservationSummaryDTO("София", "København", new Date(),
-                new Date(), "Big ferry", 3, "Car", 3500700);
+        JSONObject object = new JSONObject(jsonQuery);
+
+        int journeyId = 0, numberOfPeople = 0;
+        String vehicleType = "";
+        try {
+            journeyId = object.getInt("journeyId");
+            numberOfPeople = object.getInt("numberOfPeople");
+            vehicleType = object.getString("vehicleType");
+        } catch (Exception e) {
+            return null;
+        }
+
+        int max = 999999, min = 100000;
+
+        int routeId = 0;
+        for (int x = 0; x < 20; x++) {
+            JourneysDTO currRouteObj = getJourneysByRouteId(routeId);
+
+            List<JourneySummaryDTO> listOfJourneySummaries = currRouteObj.getJourneysList();
+
+            for (int y = 0; y < listOfJourneySummaries.size(); y++) {
+                if (listOfJourneySummaries.get(y).getJourneyId() == journeyId) {
+
+                    //Note: Departure and Arrival Date will never be the same as
+                    //the original object, because this is a mock and we don't
+                    //really save anything anywhere.
+                    return new ReservationSummaryDTO(
+                            currRouteObj.getDepartureLocation(),
+                            currRouteObj.getDestinationLocation(),
+                            listOfJourneySummaries.get(y).getDepartureDate(),
+                            listOfJourneySummaries.get(y).getArrivalDate(),
+                            listOfJourneySummaries.get(y).getFerryName(),
+                            numberOfPeople, vehicleType,
+                            new Random().nextInt((max - min) + 1) + min);
+                }
+            }
+            routeId++;
+        }
+        return null;
+
     }
 }
