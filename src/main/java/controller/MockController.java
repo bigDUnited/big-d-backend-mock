@@ -1,15 +1,14 @@
 package controller;
 
+import contractinterface.ContractInterface;
 import dtos.JourneysDTO;
 import dtos.LocationDTO;
 import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
-import java.util.ArrayList;
 import java.util.List;
 import mock.MockModel;
-import utilities.HttpServerGeneralUtils;
 
-public class MockController {
+public class MockController implements ContractInterface {
 
     private static MockController instance = null;
 
@@ -20,25 +19,33 @@ public class MockController {
         return instance;
     }
 
-    public List<LocationDTO> getAllLocations() {
+    @Override
+    public List<LocationDTO> getLocations() {
         return MockModel.getLocations();
     }
 
-    public List<RouteDTO> getRoutes(String locationId) {
-        if (HttpServerGeneralUtils.isNumeric(locationId)) {
-            return MockModel.getRouteByLocationId(Integer.parseInt(locationId));
-        }
-        return new ArrayList();
+    @Override
+    public List<RouteDTO> getRoutes(int locationId) {
+        return MockModel.getRouteByLocationId(locationId);
     }
 
-    public JourneysDTO getJourney(String routeId) {
-        if (HttpServerGeneralUtils.isNumeric(routeId)) {
-            return MockModel.getJourneysByRouteId(Integer.parseInt(routeId));
-        }
-        return null;
+    @Override
+    public JourneysDTO getJourney(int routeId) {
+        return MockModel.getJourneysByRouteId(routeId);
     }
 
-    public ReservationSummaryDTO makeReservation(String jsonQuery) {
-        return MockModel.createReservation(jsonQuery);
+    @Override
+    public ReservationSummaryDTO makeReservation(int journeyId, int numOfPeople, String vehicleType) {
+        return MockModel.createReservation(journeyId, numOfPeople, vehicleType);
+    }
+
+    @Override
+    public ReservationSummaryDTO getReservation(int reservationId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<ReservationSummaryDTO> getAllReservations() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

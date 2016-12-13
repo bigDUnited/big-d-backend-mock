@@ -121,20 +121,7 @@ public class MockModel {
 
     }
 
-    public static ReservationSummaryDTO createReservation(String jsonQuery) {
-        //Mock does not contain logic, therefore the json object is not used.
-        JSONObject object = new JSONObject(jsonQuery);
-
-        int journeyId = 0, numberOfPeople = 0;
-        String vehicleType = "";
-        try {
-            journeyId = object.getInt("journeyId");
-            numberOfPeople = object.getInt("numberOfPeople");
-            vehicleType = object.getString("vehicleType");
-        } catch (Exception e) {
-            return null;
-        }
-
+    public static ReservationSummaryDTO createReservation(int journeyId, int numOfPeople, String vehicleType) {
         int max = 999999, min = 100000;
 
         int routeId = 0;
@@ -155,7 +142,7 @@ public class MockModel {
                             listOfJourneySummaries.get(y).getDepartureDate(),
                             listOfJourneySummaries.get(y).getArrivalDate(),
                             listOfJourneySummaries.get(y).getFerryName(),
-                            numberOfPeople, vehicleType,
+                            numOfPeople, vehicleType,
                             new Random().nextInt((max - min) + 1) + min);
                 }
             }

@@ -40,7 +40,7 @@ public class MockControllerTest {
     public void testGetAllLocations() {
         System.out.println("getAllLocations");
         List<LocationDTO> expResult = MockModel.getLocations();
-        List<LocationDTO> result = controllerInstance.getAllLocations();
+        List<LocationDTO> result = controllerInstance.getLocations();
 
         assertEquals(expResult.toString(), result.toString());
     }
@@ -53,7 +53,7 @@ public class MockControllerTest {
         System.out.println("getRoutes");
         Integer locationId = 1;
         List<RouteDTO> expResult = MockModel.getRouteByLocationId(locationId);
-        List<RouteDTO> result = controllerInstance.getRoutes(locationId.toString());
+        List<RouteDTO> result = controllerInstance.getRoutes(locationId);
 
         assertEquals(expResult.toString(), result.toString());
     }
@@ -66,7 +66,7 @@ public class MockControllerTest {
         System.out.println("getJourney");
         Integer routeId = 1;
         JourneysDTO expResult = MockModel.getJourneysByRouteId(routeId);
-        JourneysDTO result = controllerInstance.getJourney(routeId.toString());
+        JourneysDTO result = controllerInstance.getJourney(routeId);
 
         assertEquals(expResult.getDepartureLocation(), result.getDepartureLocation());
         assertEquals(expResult.getDestinationLocation(), result.getDestinationLocation());
@@ -80,8 +80,11 @@ public class MockControllerTest {
     public void testMakeReservation() {
         System.out.println("makeReservation");
         String jsonQuery = "{journeyId:1,numberOfPeople:2,vehicleType:car}";
-        ReservationSummaryDTO expResult = MockModel.createReservation(jsonQuery);
-        ReservationSummaryDTO result = controllerInstance.makeReservation(jsonQuery);
+        int journeyId = 1;
+        int numOfPeople = 2;
+        String vehicleType = "car";
+        ReservationSummaryDTO expResult = MockModel.createReservation(journeyId, numOfPeople, vehicleType);
+        ReservationSummaryDTO result = controllerInstance.makeReservation(journeyId, numOfPeople, vehicleType);
         System.out.println("arrival" + expResult.getArrivalDate() + " arrival res" + result.getArrivalDate());
         System.out.println("departure" + expResult.getDepartureDate() + " departure res" + result.getDepartureDate());
 
