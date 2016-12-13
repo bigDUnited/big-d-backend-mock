@@ -17,9 +17,11 @@ import java.util.Random;
 public class MockModel {
 
     private Map<Integer, ReservationSummaryDTO> localRSlist;
+    private Random rand;
 
     public MockModel() {
         localRSlist = new HashMap();
+        rand = new Random();
     }
 
     public static List<LocationDTO> getLocations() {
@@ -93,14 +95,14 @@ public class MockModel {
         }
     }
 
-    private static Date returnImaginaryDate(Calendar cal) {
+    private Date returnImaginaryDate(Calendar cal) {
         int max = 12, min = 2;
 
-        cal.add(Calendar.HOUR_OF_DAY, -(new Random().nextInt((max - min) + 1) + min)); // adds one hour
+        cal.add(Calendar.HOUR_OF_DAY, -(rand.nextInt((max - min) + 1) + min)); // adds one hour
         return cal.getTime(); // returns new date object, one hour in the future
     }
 
-    public static JourneysDTO getJourneysByRouteId(int routeId) {
+    public JourneysDTO getJourneysByRouteId(int routeId) {
 
         if (routeId < 0 || routeId > 19) {
             return null;
@@ -150,7 +152,7 @@ public class MockModel {
                             listOfJourneySummaries.get(y).getArrivalDate(),
                             listOfJourneySummaries.get(y).getFerryName(),
                             numOfPeople, vehicleType,
-                            new Random().nextInt((max - min) + 1) + min);
+                            rand.nextInt((max - min) + 1) + min);
                     localRSlist.put(curRSobj.getReferenceNumber(), curRSobj);
                     return localRSlist.get(curRSobj.getReferenceNumber());
                 }
@@ -159,5 +161,20 @@ public class MockModel {
         }
         return null;
 
+    }
+
+    public ReservationSummaryDTO getReservationById(int reservationId) {
+        for (Map.Entry<Integer, ReservationSummaryDTO> entry : localRSlist.entrySet()) {
+            if (entry.getKey().intValue() == reservationId) {
+                return entry.getValue();
+            }
+
+        }
+        return null;
+    }
+
+    public List<ReservationSummaryDTO> getReservations() {
+        List<ReservationSummaryDTO> al = new ArrayList<ReservationSummaryDTO>(localRSlist.values());
+        return al;
     }
 }

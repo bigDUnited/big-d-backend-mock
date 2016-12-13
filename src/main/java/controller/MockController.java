@@ -36,7 +36,7 @@ public class MockController implements ContractInterface {
 
     @Override
     public JourneysDTO getJourney(int routeId) {
-        return MockModel.getJourneysByRouteId(routeId);
+        return mockModel.getJourneysByRouteId(routeId);
     }
 
     @Override
@@ -46,11 +46,11 @@ public class MockController implements ContractInterface {
 
     @Override
     public ReservationSummaryDTO getReservation(int reservationId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mockModel.getReservationById(reservationId);
     }
 
     @Override
     public List<ReservationSummaryDTO> getAllReservations() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return mockModel.getReservations();
     }
 }

@@ -8,6 +8,7 @@ import dtos.JourneysDTO;
 import dtos.LocationDTO;
 import dtos.ReservationSummaryDTO;
 import dtos.RouteDTO;
+import java.util.ArrayList;
 import java.util.Date;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -229,4 +230,116 @@ public class MockitoBackendMockTest {
         MatcherAssert.assertThat(reservationSummaryDTO.getReferenceNumber(),
                 is(localReferenceNumber));
     }
+
+    @Test
+    public void getReservationByIdMock_Test() {
+
+        //Prebuild
+        int localNumOfPeople = 3;
+        String localVehicleType = "Car";
+
+        String localDepartureLocation = "София";
+        String localDestinationLocation = "København";
+        String localFerryName = "Big ferry";
+        int localReferenceNumber = 3500700;
+
+        //Prebuild
+        int reservationId = localReferenceNumber;
+
+        //Mocking
+        Mockito.when(
+                contract.getReservation(reservationId)
+        ).thenAnswer(new Answer() {
+            ReservationSummaryDTO mockedReservationSummaryDTO;
+
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                mockedReservationSummaryDTO
+                        = new ReservationSummaryDTO("София", "København", new Date(),
+                                new Date(), "Big ferry", 3, "Car", 3500700);
+
+                return mockedReservationSummaryDTO;
+            }
+        });
+
+        //Testing
+        ReservationSummaryDTO specificReservationSummaryDTO
+                = contract.getReservation(reservationId);
+
+        MatcherAssert.assertThat(specificReservationSummaryDTO.getDepartureLocation(),
+                is(localDepartureLocation));
+
+        MatcherAssert.assertThat(specificReservationSummaryDTO.getDestinationLocation(),
+                is(localDestinationLocation));
+
+        MatcherAssert.assertThat(specificReservationSummaryDTO.getFerryName(),
+                is(localFerryName));
+
+        MatcherAssert.assertThat(specificReservationSummaryDTO.getNumberOfPeople(),
+                is(localNumOfPeople));
+
+        MatcherAssert.assertThat(specificReservationSummaryDTO.getVehicleType(),
+                is(localVehicleType));
+
+        MatcherAssert.assertThat(specificReservationSummaryDTO.getReferenceNumber(),
+                is(localReferenceNumber));
+    }
+
+    @Test
+    public void getReservationsMock_Test() {
+        //Prebuild
+        int[] localNumOfPeopleArray = new int[]{3, 2};
+        String[] localVehicleTypes = new String[]{"car", "spaceship"};
+
+        String[] localDepartureLocations = new String[]{"København", "София"};
+        String[] localDestinationLocations = new String[]{"София", "København"};
+        String[] localFerryNames = new String[]{"Big ferry", "Small ferry"};
+        int[] localReferenceNumbers = new int[]{3500700, 99999999};
+
+        Mockito.when(
+                contract.getAllReservations()
+        ).thenAnswer(new Answer() {
+            List<ReservationSummaryDTO> mockedRSdtoList = new ArrayList();
+
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                mockedRSdtoList.add(new ReservationSummaryDTO("København",
+                        "София", new Date(), new Date(), "Big ferry", 3, "car",
+                        3500700));
+
+                mockedRSdtoList.add(new ReservationSummaryDTO("София",
+                        "København", new Date(), new Date(), "Small ferry", 2, "spaceship",
+                        99999999));
+
+                return mockedRSdtoList;
+            }
+        });
+
+        //Testing
+        List<ReservationSummaryDTO> rsDTOlist = contract.getAllReservations();
+
+        for (int i = 0; i < 2; i++) {
+
+            MatcherAssert.assertThat(rsDTOlist.get(i).getDepartureLocation(),
+                    is(localDepartureLocations[i]));
+
+            MatcherAssert.assertThat(rsDTOlist.get(i).getDestinationLocation(),
+                    is(localDestinationLocations[i]));
+
+            MatcherAssert.assertThat(rsDTOlist.get(i).getFerryName(),
+                    is(localFerryNames[i]));
+
+            MatcherAssert.assertThat(rsDTOlist.get(i).getNumberOfPeople(),
+                    is(localNumOfPeopleArray[i]));
+
+            MatcherAssert.assertThat(rsDTOlist.get(i).getVehicleType(),
+                    is(localVehicleTypes[i]));
+
+            MatcherAssert.assertThat(rsDTOlist.get(i).getReferenceNumber(),
+                    is(localReferenceNumbers[i]));
+
+        }
+
+    }
+
 }

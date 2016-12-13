@@ -65,7 +65,7 @@ public class MockControllerTest {
     public void testGetJourney() {
         System.out.println("getJourney");
         Integer routeId = 1;
-        JourneysDTO expResult = MockModel.getJourneysByRouteId(routeId);
+        JourneysDTO expResult = new MockModel().getJourneysByRouteId(routeId);
         JourneysDTO result = controllerInstance.getJourney(routeId);
 
         assertEquals(expResult.getDepartureLocation(), result.getDepartureLocation());
