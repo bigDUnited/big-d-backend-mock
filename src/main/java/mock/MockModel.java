@@ -9,11 +9,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
-import org.json.JSONObject;
 
 public class MockModel {
+
+    private Map<Integer, ReservationSummaryDTO> localRSlist;
+
+    public MockModel() {
+        localRSlist = new HashMap();
+    }
 
     public static List<LocationDTO> getLocations() {
         return Arrays.asList(
@@ -121,7 +128,7 @@ public class MockModel {
 
     }
 
-    public static ReservationSummaryDTO createReservation(int journeyId, int numOfPeople, String vehicleType) {
+    public ReservationSummaryDTO createReservation(int journeyId, int numOfPeople, String vehicleType) {
         int max = 999999, min = 100000;
 
         int routeId = 0;
@@ -136,7 +143,7 @@ public class MockModel {
                     //Note: Departure and Arrival Date will never be the same as
                     //the original object, because this is a mock and we don't
                     //really save anything anywhere.
-                    return new ReservationSummaryDTO(
+                    ReservationSummaryDTO curRSobj = new ReservationSummaryDTO(
                             currRouteObj.getDepartureLocation(),
                             currRouteObj.getDestinationLocation(),
                             listOfJourneySummaries.get(y).getDepartureDate(),
@@ -144,6 +151,8 @@ public class MockModel {
                             listOfJourneySummaries.get(y).getFerryName(),
                             numOfPeople, vehicleType,
                             new Random().nextInt((max - min) + 1) + min);
+                    localRSlist.put(curRSobj.getReferenceNumber(), curRSobj);
+                    return localRSlist.get(curRSobj.getReferenceNumber());
                 }
             }
             routeId++;

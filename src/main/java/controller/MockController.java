@@ -11,12 +11,17 @@ import mock.MockModel;
 public class MockController implements ContractInterface {
 
     private static MockController instance = null;
+    private MockModel mockModel;
 
     public static MockController getInstance() {
         if (instance == null) {
             instance = new MockController();
         }
         return instance;
+    }
+
+    public MockController() {
+        mockModel = new MockModel();
     }
 
     @Override
@@ -36,7 +41,7 @@ public class MockController implements ContractInterface {
 
     @Override
     public ReservationSummaryDTO makeReservation(int journeyId, int numOfPeople, String vehicleType) {
-        return MockModel.createReservation(journeyId, numOfPeople, vehicleType);
+        return mockModel.createReservation(journeyId, numOfPeople, vehicleType);
     }
 
     @Override

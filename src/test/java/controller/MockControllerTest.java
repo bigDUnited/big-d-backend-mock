@@ -83,7 +83,7 @@ public class MockControllerTest {
         int journeyId = 1;
         int numOfPeople = 2;
         String vehicleType = "car";
-        ReservationSummaryDTO expResult = MockModel.createReservation(journeyId, numOfPeople, vehicleType);
+        ReservationSummaryDTO expResult = new MockModel().createReservation(journeyId, numOfPeople, vehicleType);
         ReservationSummaryDTO result = controllerInstance.makeReservation(journeyId, numOfPeople, vehicleType);
         System.out.println("arrival" + expResult.getArrivalDate() + " arrival res" + result.getArrivalDate());
         System.out.println("departure" + expResult.getDepartureDate() + " departure res" + result.getDepartureDate());
